@@ -5,7 +5,8 @@ import { writeAnagramsFile } from '../utils/anagram.tools';
 import { Anagram } from './anagram.entity';
 import { AnagramRepository, ANAGRAM_REPOSITORY } from './repository/anagram.repository';
 import { EventEmitter } from 'events';
-
+import fs from 'fs';
+import readline from 'readline';
 @Injectable()
 export class AnagramService {
   constructor(@Inject(ANAGRAM_REPOSITORY) private readonly anagramRepository: AnagramRepository, private readonly configService: ConfigService) {}
@@ -19,7 +20,7 @@ export class AnagramService {
 
     writeAnagramsFile(
       Number(this.configService.get('ANAGRAM_WORD_COUNT') || '10'),
-      'tmp',
+      'anagramFile.txt',
       Number(this.configService.get('ANAGRAM_MIN_LENGTH') || '4'),
       Number(this.configService.get('ANAGRAM_MAX_LENGTH') || '5'),
       async () => {
@@ -34,12 +35,9 @@ export class AnagramService {
     });
   }
 
-  async generateAnagramsUsingFile() {
-    const fs = require('fs');
-    const readline = require('readline');
-
-    async function processLineByLine() {
-      const fileStream = fs.createReadStream('tmp');
+  private async generateAnagramsUsingFile() {
+    async function computeAnagramsMap() {
+      const fileStream = fs.createReadStream('anagramFile.txt');
       const anagramsMap: any = {};
 
       const rl = readline.createInterface({
@@ -64,7 +62,8 @@ export class AnagramService {
 
       return JSON.stringify(anagramsMap);
     }
-    const anagrams = await processLineByLine();
+    const anagrams = await computeAnagramsMap();
+    fs.unlinkSync('anagramFile.txt');
     return anagrams;
   }
 }

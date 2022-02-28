@@ -2,15 +2,22 @@ import { InMemUserRepository } from '../../repository/in-mem-user.repository';
 import { User } from '../../user.entity';
 import { SaveUserCommand, SaveUserCommandHandler } from './save-user.command';
 import { v4 as uuid } from 'uuid';
+import { ConfigProvider } from '../../../config/config.provider';
+import { ConfigService } from '../../../config/config.service';
+import { AnagramService } from '../../../anagram/anagram.service';
 
 describe('SaveUserHandler', () => {
   let userRepository: InMemUserRepository;
   let handler: SaveUserCommandHandler;
+  let configService: ConfigService;
+  const anagramService = {} as AnagramService;
   const email = 'test@zefir.fr';
 
   beforeEach(async () => {
     userRepository = new InMemUserRepository();
-    handler = new SaveUserCommandHandler(userRepository);
+    configService = new ConfigProvider();
+    anagramService.createAnagram = jest.fn();
+    handler = new SaveUserCommandHandler(userRepository, anagramService, configService);
   });
 
   afterEach(() => {
@@ -24,6 +31,7 @@ describe('SaveUserHandler', () => {
     const count = userRepository.count();
 
     expect(count).toBe(1);
+    expect(anagramService.createAnagram).toHaveBeenCalled();
   });
 
   it('should throw an error if the address is already used', async () => {
