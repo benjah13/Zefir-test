@@ -17,6 +17,7 @@ describe('SaveUserHandler', () => {
     userRepository = new InMemUserRepository();
     configService = new ConfigProvider();
     anagramService.createAnagram = jest.fn();
+    anagramService.getAnagramForUser = jest.fn();
     handler = new SaveUserCommandHandler(userRepository, anagramService, configService);
   });
 
@@ -34,12 +35,25 @@ describe('SaveUserHandler', () => {
     expect(anagramService.createAnagram).toHaveBeenCalled();
   });
 
-  it('should throw an error if the address is already used', async () => {
-    userRepository.saveUser(new User({ id: uuid(), email, fib: 1 }));
-
+  it('should throw an error if the address is already used with associated anagrams', async () => {
+    const userId = uuid();
+    userRepository.saveUser(new User({ id: userId, email, fib: 1 }));
+    anagramService.getAnagramForUser = jest.fn().mockResolvedValue({ anagramMap: '', id: uuid(), userId });
     const command = new SaveUserCommand(email);
 
     await expect(handler.execute(command)).rejects.toThrow('A user is already registered with this email');
+  });
+
+  it('should override existing user if address already exists but without anagrams', async () => {
+    userRepository.saveUser(new User({ id: uuid(), email, fib: 1 }));
+    anagramService.getAnagramForUser = jest.fn().mockResolvedValue(undefined);
+
+    const command = new SaveUserCommand(email);
+    await handler.execute(command);
+
+    const count = userRepository.count();
+    expect(count).toBe(1);
+    expect(anagramService.createAnagram).toHaveBeenCalled();
   });
 
   it('should throw an error if the address is not well formatted', async () => {

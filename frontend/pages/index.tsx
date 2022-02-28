@@ -1,5 +1,5 @@
-import Layout from '../components/Layout';
-import Users from '../components/Users';
+import Layout from '../components/tools/Layout';
+import Users from '../components/tools/Users/Users';
 
 const IndexPage = () => {
   return (

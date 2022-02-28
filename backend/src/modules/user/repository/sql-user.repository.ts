@@ -10,6 +10,10 @@ export class SqlUserRepository extends AbstractRepository<User> implements UserR
     await this.repository.save(user);
   }
 
+  async updateUser(user: User): Promise<void> {
+    await this.repository.update(user.id, user);
+  }
+
   async getUserByEmail(email: string): Promise<User | undefined> {
     return await this.repository.createQueryBuilder('user').where('user.email = :email', { email }).getOne();
   }

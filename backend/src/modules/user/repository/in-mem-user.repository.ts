@@ -8,6 +8,12 @@ export class InMemUserRepository implements UserRepository {
     this.users.push(user);
   }
 
+  async updateUser(user: User): Promise<void> {
+    const matchingUserIdx = this.users.findIndex((existingUser) => existingUser.id === user.id);
+    if (matchingUserIdx !== undefined) this.users.splice(matchingUserIdx);
+    this.users.push(user);
+  }
+
   async getUserByEmail(email: string): Promise<User | undefined> {
     return this.users.find((user: User) => user.email === email);
   }

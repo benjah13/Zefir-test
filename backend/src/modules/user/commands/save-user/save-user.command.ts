@@ -7,6 +7,7 @@ import { EmailAlreadyExistsError } from '../../error/email-already-exists.error'
 import { InvalidEmailError } from '../../error/invalid-email.error';
 import { AnagramService } from '../../../anagram/anagram.service';
 import { ConfigService } from '../../../config/config.service';
+import { Anagram } from '../../../anagram/anagram.entity';
 
 export class SaveUserCommand {
   constructor(public readonly email: string) {}
@@ -29,17 +30,25 @@ export class SaveUserCommandHandler implements ICommandHandler<SaveUserCommand> 
     }
 
     const user = await this.userRepository.getUserByEmail(email);
+
+    let anagrams: Anagram | undefined;
     if (user) {
-      throw new EmailAlreadyExistsError('A user is already registered with this email');
+      anagrams = await this.anagramService.getAnagramForUser(user.id);
+      if (anagrams) {
+        throw new EmailAlreadyExistsError('A user is already registered with this email');
+      }
     }
 
-    const id = uuid();
+    const id = user ? user.id : uuid();
     const min = Number(this.configService.get('USER_FIBONACCI_MIN') || '10');
     const max = Number(this.configService.get('USER_FIBONACCI_MAX') || '20');
     const fib = fibonacci(getRandomNumber(min, max));
 
-    await this.userRepository.saveUser(new User({ id, email, fib }));
-
+    if (user) {
+      await this.userRepository.updateUser(new User({ id, email, fib }));
+    } else {
+      await this.userRepository.saveUser(new User({ id, email, fib }));
+    }
     await this.anagramService.createAnagram(id);
     console.log(`user ${id} created`);
   }

@@ -11,20 +11,25 @@ import readline from 'readline';
 export class AnagramService {
   constructor(@Inject(ANAGRAM_REPOSITORY) private readonly anagramRepository: AnagramRepository, private readonly configService: ConfigService) {}
 
+  async getAnagramForUser(userId: string) {
+    return this.anagramRepository.getByUserId(userId);
+  }
+
   async createAnagram(userId: string) {
     const id = uuid();
     const bus = new EventEmitter();
 
     console.log('start to write file');
     let anagrams = '';
+    const timestamp = new Date().getTime();
 
     writeAnagramsFile(
       Number(this.configService.get('ANAGRAM_WORD_COUNT') || '10'),
-      'anagramFile.txt',
+      `anagramFile_${timestamp}.txt`,
       Number(this.configService.get('ANAGRAM_MIN_LENGTH') || '4'),
       Number(this.configService.get('ANAGRAM_MAX_LENGTH') || '5'),
       async () => {
-        anagrams = await this.generateAnagramsUsingFile();
+        anagrams = await this.generateAnagramsUsingFile(timestamp);
         await this.anagramRepository.saveAnagram(new Anagram({ id, userId, anagramMap: anagrams }));
         console.log(`anagram ${id} created`);
         bus.emit('fileWritten');
@@ -35,9 +40,9 @@ export class AnagramService {
     });
   }
 
-  private async generateAnagramsUsingFile() {
+  private async generateAnagramsUsingFile(timestamp: number) {
     async function computeAnagramsMap() {
-      const fileStream = fs.createReadStream('anagramFile.txt');
+      const fileStream = fs.createReadStream(`anagramFile_${timestamp}.txt`);
       const anagramsMap: any = {};
 
       const rl = readline.createInterface({
@@ -63,7 +68,7 @@ export class AnagramService {
       return JSON.stringify(anagramsMap);
     }
     const anagrams = await computeAnagramsMap();
-    fs.unlinkSync('anagramFile.txt');
+    fs.unlinkSync(`anagramFile_${timestamp}.txt`);
     return anagrams;
   }
 }

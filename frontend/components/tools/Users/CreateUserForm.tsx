@@ -1,9 +1,9 @@
-import React, { ChangeEvent, FocusEventHandler, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
-import { useSaveUserMutation } from '../graphql/generated/graphql';
-import handleError from '../utils/handle-error';
-import handleSuccess from '../utils/handle-success';
-import loader from '../assets/loading.gif';
+import { useSaveUserMutation } from '../../../graphql/generated/graphql';
+import handleError from '../../../utils/handle-error';
+import handleSuccess from '../../../utils/handle-success';
+import loader from '../../../assets/loading.gif';
 
 type CreateUserFormProps = {
   setShowModal: (showModal: boolean) => void;
@@ -25,11 +25,11 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ setShowModal }) => {
     setUserEmail(e.target.value);
   };
 
-  const [triggerMutation, { called }] = useSaveUserMutation({
-    refetchQueries: ['getAll'],
+  const [triggerMutation, { client }] = useSaveUserMutation({
     onCompleted: () => {
       endCall = performance.now();
       setDisabled(false);
+      client.resetStore();
       reset();
       handleSuccess(`User has been created in ${Math.floor(endCall - startCall) / 1000} s`);
       setShowModal(false);
@@ -91,7 +91,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({ setShowModal }) => {
       </button>
       {disabled && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity flex justify-center items-center">
-          <img src={loader.src} alt="loading" />
+          <img src={loader} alt="loading" className="w-8" />
         </div>
       )}
     </div>

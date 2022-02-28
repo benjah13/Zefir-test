@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useGetAllQuery } from '../graphql/generated/graphql';
 import { toast } from 'react-toastify';
 import UserCard from './UserCard';
-import Modal from './Modal';
 import CreateUserForm from './CreateUserForm';
+import Modal from '../Modal';
+import { useGetAllQuery } from '../../../graphql/generated/graphql';
 
 const Users: React.FC = () => {
   const { data, loading } = useGetAllQuery({
