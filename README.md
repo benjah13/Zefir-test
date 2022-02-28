@@ -1,3 +1,21 @@
+## How to run the project 
+### backend 
+
+- open a terminal inside the `backend` folder
+- run `docker-compose up -d` command
+- run `yarn` command
+- edit `.env.development` file values
+- run `yarn start`
+- server starts on port `3001`
+### frontend 
+
+- open a terminal inside the `frontend` folder
+- run `yarn` command
+- run `yarn build` command
+- run `yarn start` command
+- appplication starts on port `3000`
+
+
 ## Objective
 
 Provide a full-fledged web application in our tech stack:
