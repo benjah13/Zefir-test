@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc",
+    "graph-gen": "graphql-codegen"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.4.17",
+    "axios": "^0.26.0",
+    "dotenv-safe": "^8.2.0",
+    "graphql": "^15.5.1",
+    "next": "latest",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.6",
+    "@graphql-codegen/typescript": "^1.22.4",
+    "@graphql-codegen/typescript-operations": "^1.18.3",
+    "@graphql-codegen/typescript-react-apollo": "^2.3.0",
+    "@types/dotenv-safe": "^8.1.2",
+    "@types/node": "^12.12.21",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "autoprefixer": "^10.4.2",
+    "graphql": "^15.5.1",
+    "postcss": "^8.4.6",
+    "react-toastify": "^5.5.0",
+    "tailwindcss": "^3.0.23",
+    "typescript": "4.0"
+  }
+}

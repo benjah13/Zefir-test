@@ -1,0 +1,11 @@
+services:
+  postgres:
+    container_name: zefir_postgres
+    image: postgres:9.6-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: zefir
