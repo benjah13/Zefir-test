@@ -26,7 +26,7 @@ export class SaveUserCommandHandler implements ICommandHandler<SaveUserCommand> 
 
     const regex = new RegExp('[a-z0-9]+@zefir.fr');
     if (!regex.test(email)) {
-      throw new InvalidEmailError('email addresses must be @zefir.fr');
+      throw new InvalidEmailError('email address must be valid @zefir.fr address');
     }
 
     const user = await this.userRepository.getUserByEmail(email);

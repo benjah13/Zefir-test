@@ -2,8 +2,8 @@ const fs = require('fs');
 const { Readable, Transform } = require('stream');
 
 // USE THIS FUNCTION TO WRITE ANAGRAMS TO A FILE
-export function writeAnagramsFile(nbWords: any, filename: any, maxLength: number, minLength: number, callback: () => void) {
-  const words = randomWords({ exactly: nbWords, maxLength, minLength });
+export function writeAnagramsFile(nbWords: any, filename: any, callback: () => void) {
+  const words = randomWords({ exactly: nbWords });
   console.log(`Creating anagrams for ${words}`);
 
   function* buildAnagrams(input: string) {

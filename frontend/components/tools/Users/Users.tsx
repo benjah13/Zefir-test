@@ -18,15 +18,15 @@ const Users: React.FC = () => {
       return data.users.length === 0 ? (
         <div className="px-6 text-lg">No users to display</div>
       ) : (
-        data.users.map((user) => <UserCard user={user} />)
+        data.users.map((user) => <UserCard user={user} key={user.id} />)
       );
     }
   };
   return (
     <>
-      <div className="flex mt-10 mb-10 items-center justify-end mr-4 ">
+      <div className="flex mt-10 mb-10 items-center justify-end mr-6 ">
         <button
-          className=" bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          className=" bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-8 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
           type="button"
           onClick={() => setShowCreateUserModal(true)}
         >
@@ -35,7 +35,7 @@ const Users: React.FC = () => {
       </div>
       {loading && <p>...Loading...</p>}
 
-      <div className="items-center flex justify-between bg-white p-6 m-2 rounded-lg shadow-lg">
+      <div className="items-center flex justify-between bg-white p-6 my-2 mx-8 rounded-lg shadow-lg">
         <p className="text-gray-800 text-lg md:text-2xl font-bold w-[30%]">EMAIL</p>
         <p className="text-gray-700 text-lg md:text-2xl font-bold w-[10%]">FIBONACCI</p>
         <p className="text-gray-700 text-lg md:text-2xl font-bold w-[60%] flex justify-end">ANAGRAMS</p>

@@ -60,6 +60,6 @@ describe('SaveUserHandler', () => {
     const wronglyFormattedAddress = 'a@gmail.com';
     const command = new SaveUserCommand(wronglyFormattedAddress);
 
-    await expect(handler.execute(command)).rejects.toThrow('email addresses must be @zefir.fr');
+    await expect(handler.execute(command)).rejects.toThrow('email address must be valid @zefir.fr address');
   });
 });

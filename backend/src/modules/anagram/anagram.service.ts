@@ -23,18 +23,12 @@ export class AnagramService {
     let anagrams = '';
     const timestamp = new Date().getTime();
 
-    writeAnagramsFile(
-      Number(this.configService.get('ANAGRAM_WORD_COUNT') || '10'),
-      `anagramFile_${timestamp}.txt`,
-      Number(this.configService.get('ANAGRAM_MIN_LENGTH') || '4'),
-      Number(this.configService.get('ANAGRAM_MAX_LENGTH') || '5'),
-      async () => {
-        anagrams = await this.generateAnagramsUsingFile(timestamp);
-        await this.anagramRepository.saveAnagram(new Anagram({ id, userId, anagramMap: anagrams }));
-        console.log(`anagram ${id} created`);
-        bus.emit('fileWritten');
-      },
-    );
+    writeAnagramsFile(Number(this.configService.get('ANAGRAM_WORD_COUNT') || '10'), `anagramFile_${timestamp}.txt`, async () => {
+      anagrams = await this.generateAnagramsUsingFile(timestamp);
+      await this.anagramRepository.saveAnagram(new Anagram({ id, userId, anagramMap: anagrams }));
+      console.log(`anagram ${id} created`);
+      bus.emit('fileWritten');
+    });
     return new Promise((resolve) => {
       bus.once('fileWritten', resolve);
     });

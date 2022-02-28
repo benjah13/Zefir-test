@@ -73,7 +73,7 @@ describe('users e2e ', () => {
         saveUser(client, {
           email,
         }),
-      ).rejects.toThrow(/email addresses must be @zefir.fr/);
+      ).rejects.toThrow(/email address must be valid @zefir.fr address/);
     });
 
     it('returns an error if the email is already used', async () => {

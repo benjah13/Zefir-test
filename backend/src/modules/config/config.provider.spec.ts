@@ -42,11 +42,11 @@ describe('ConfigProvider', () => {
     });
 
     it('returns the value from process.env when the key exists in both dotenv and process.env', () => {
-      process.env.COMPANY = 'GOJOB';
+      process.env.COMPANY = 'ZEFIR';
       dotenvSafe.config = jest.fn().mockReturnValue({ parsed: { COMPANY: 'COCA' } });
 
       config = new ConfigProvider();
-      expect(config.get('COMPANY')).toEqual('GOJOB');
+      expect(config.get('COMPANY')).toEqual('ZEFIR');
     });
   });
 });
